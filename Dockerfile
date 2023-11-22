@@ -1,14 +1,21 @@
-# Use uma Imagem Official do Python
+#Use uma Imagem Official do Python
 FROM python:3
 
+# Adicionando um usuário de sistema
+RUN adduser --system --home /home/DigitalExperience-code  DigitalExperience-code
+USER DigitalExperience-code
+
 # Definindo o diretório onde a aplicação será armazenada
-WORKDIR /app
+WORKDIR /home/DigitalExperience-code
+
+# Definindo o local onde o binário do gunicorn é instalado
+ENV PATH="/home/DigitalExperience-code/.local/bin:${PATH}"
 
 # Copiar os arquivos da pasta local para dentro do container
-COPY . /app
+COPY --chown=DigitalExperience-code:nogroup --chmod=444 app.py requirements.txt /home/DigitalExperience-code/
 
 # Instalar as dependências de Python de acordo com o que foi desenvolvido na aplicação e que está declarado no arquivo requirements.txt.
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip install --user --trusted-host pypi.python.org -r requirements.txt
 
 # Garante que será iniciado a aplicação.
 CMD ["gunicorn", "app:app"]
