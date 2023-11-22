@@ -92,3 +92,6 @@ jobs:
 
       - name: Test Prod
         run: 'curl "${{ steps.prod-deploy.outputs.url }}"'
+
+      - name: Install Requirements
+        run:  pip install flask pytest pytest-cov flask-wtf
